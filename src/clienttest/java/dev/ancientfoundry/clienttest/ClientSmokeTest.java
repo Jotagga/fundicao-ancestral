@@ -49,6 +49,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.WorldOptions;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -187,6 +188,17 @@ public final class ClientSmokeTest implements ClientModInitializer {
 		Thread.sleep(12_000L);
 		screenshot("foundry_world.png");
 
+		// From above: the vent, the roof windows and the hopper on the input hatch.
+		onServer(server, s -> {
+			ServerPlayer player = s.getPlayerList().getPlayers().get(0);
+			player.teleportTo(s.overworld(), controllerPos.getX() + 0.5 - 3.0, controllerPos.getY() + 5.0,
+					controllerPos.getZ() + 0.5 - 3.0, -29.0F, 34.0F);
+			return null;
+		});
+		waitTicks(40);
+		Thread.sleep(4_000L);
+		screenshot("foundry_top.png");
+
 		onServer(server, s -> {
 			ServerPlayer player = s.getPlayerList().getPlayers().get(0);
 
@@ -218,6 +230,15 @@ public final class ClientSmokeTest implements ClientModInitializer {
 			return null;
 		});
 
+		screenshot("foundry_gui_tooltip.png");
+
+		// Park the pointer in a corner so no tooltip covers the screen.
+		onClient(client -> {
+			GLFW.glfwSetCursorPos(client.getWindow().getWindow(), 6.0, 6.0);
+			return null;
+		});
+		waitTicks(10);
+		Thread.sleep(1_000L);
 		screenshot("foundry_gui.png");
 		onClient(client -> {
 			client.player.closeContainer();
@@ -278,6 +299,12 @@ public final class ClientSmokeTest implements ClientModInitializer {
 			}
 		}
 
+		level.setBlock(FoundryStructure.toWorld(controllerPos, facing, -1, 0, 0), ModBlocks.FOUNDRY_GLASS.defaultBlockState(), 3);
+
+		for (int dz = 1; dz <= 3; dz++) {
+			level.setBlock(FoundryStructure.toWorld(controllerPos, facing, -1, 2, dz), ModBlocks.FOUNDRY_GLASS.defaultBlockState(), 3);
+		}
+
 		level.setBlock(FoundryStructure.toWorld(controllerPos, facing, 1, 0, 0), ModBlocks.FOUNDRY_OUTPUT_HATCH.defaultBlockState(), 3);
 		BlockPos inputHatch = FoundryStructure.toWorld(controllerPos, facing, 1, 2, 1);
 		level.setBlock(inputHatch, ModBlocks.FOUNDRY_INPUT_HATCH.defaultBlockState(), 3);
@@ -307,13 +334,13 @@ public final class ClientSmokeTest implements ClientModInitializer {
 		level.setDayTime(6000L);
 		level.setWeatherParameters(100_000, 0, false, false);
 
-		// Hover north-west of the foundry, looking at its front and its windowed side.
+		// Hover in front of the foundry at window height, a little to the side.
 		player.getAbilities().flying = true;
 		player.onUpdateAbilities();
-		double x = controllerPos.getX() + 0.5 - 4.5;
-		double y = controllerPos.getY() + 1.4;
-		double z = controllerPos.getZ() + 0.5 - 4.5;
-		player.teleportTo(level, x, y, z, -35.0F, 18.0F);
+		double x = controllerPos.getX() + 0.5 - 2.5;
+		double y = controllerPos.getY() - 0.4;
+		double z = controllerPos.getZ() + 0.5 - 5.0;
+		player.teleportTo(level, x, y, z, -23.0F, 6.0F);
 		return controllerPos;
 	}
 
