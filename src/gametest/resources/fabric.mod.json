@@ -1,0 +1,18 @@
+{
+	"schemaVersion": 1,
+	"id": "ancient_foundry_gametest",
+	"version": "1.0.0",
+	"name": "Ancient Foundry Game Tests",
+	"description": "Automated in-game tests for Ancient Foundry. Not part of the released mod.",
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-gametest": [
+			"dev.ancientfoundry.gametest.FoundryGameTests"
+		]
+	},
+	"depends": {
+		"ancient_foundry": "*",
+		"fabric-gametest-api-v1": "*"
+	}
+}

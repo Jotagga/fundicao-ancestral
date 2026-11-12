@@ -1,0 +1,149 @@
+# Builds the mod and tests it on every push:
+#   1. static checks on models, textures, translations and recipes
+#   2. compile and package the jar
+#   3. unit tests + in-game tests on a headless server (including 12 simulated hours of the foundry)
+#   4. boot the packaged jar on a real Fabric server and build a foundry there
+# The jar, the logs and the test reports are uploaded as an artifact and mirrored to the
+# `ci-results` branch. Pushing a tag such as v1.0.0 also publishes a release with the jar.
+
+name: build
+
+on:
+  push:
+    branches-ignore:
+      - ci-results
+    tags:
+      - 'v*'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+
+      - name: validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+
+      # Gradle (with Fabric Loom) runs on Java 25; Minecraft 1.21.1 itself is run on Java 21.
+      - name: setup jdk
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: |
+            21
+            25
+
+      - name: restore gradle caches
+        uses: actions/cache/restore@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle/loom-cache
+          key: gradle-${{ runner.os }}-${{ hashFiles('gradle.properties', 'build.gradle', 'settings.gradle', 'gradle/wrapper/gradle-wrapper.properties') }}-${{ github.run_id }}
+          restore-keys: |
+            gradle-${{ runner.os }}-${{ hashFiles('gradle.properties', 'build.gradle', 'settings.gradle', 'gradle/wrapper/gradle-wrapper.properties') }}-
+            gradle-${{ runner.os }}-
+
+      - name: prepare
+        run: |
+          chmod +x ./gradlew ci/*.sh
+          mkdir -p ci-out
+
+      - name: check resources
+        id: resources
+        run: python3 tools/validate_resources.py 2>&1 | tee ci-out/resources.log
+
+      - name: compile and package
+        id: assemble
+        if: ${{ !cancelled() }}
+        run: ./gradlew assemble --stacktrace 2>&1 | tee ci-out/assemble.log
+
+      - name: unit tests and in-game tests
+        id: check
+        if: ${{ !cancelled() }}
+        run: ./gradlew check --stacktrace -PgameJavaVersion=21 -Porg.gradle.java.installations.fromEnv=JAVA_HOME_21_X64 2>&1 | tee ci-out/check.log
+
+      - name: boot the packaged jar on a production server
+        id: smoke
+        if: ${{ !cancelled() && steps.assemble.outcome == 'success' }}
+        run: ci/smoke-server.sh 2>&1 | tee ci-out/smoke.log
+
+      - name: collect results
+        if: ${{ always() }}
+        run: |
+          mkdir -p ci-out
+          cp build/libs/*.jar ci-out/ 2>/dev/null || true
+          cp build/gametest-report.xml ci-out/ 2>/dev/null || true
+          cp build/run/gameTest/logs/latest.log ci-out/gametest-server.log 2>/dev/null || true
+          cp build/smoke-server/server.log ci-out/smoke-server.log 2>/dev/null || true
+          if [ -d build/test-results/test ]; then mkdir -p ci-out/unit-tests && cp build/test-results/test/*.xml ci-out/unit-tests/ 2>/dev/null || true; fi
+          {
+            echo "commit:    $GITHUB_SHA"
+            echo "ref:       $GITHUB_REF"
+            echo "run:       $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "finished:  $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "resources: ${{ steps.resources.outcome }}"
+            echo "assemble:  ${{ steps.assemble.outcome }}"
+            echo "check:     ${{ steps.check.outcome }}"
+            echo "smoke:     ${{ steps.smoke.outcome }}"
+          } > ci-out/summary.txt
+          cat ci-out/summary.txt
+          grep -h "\[gametest\]" ci-out/gametest-server.log ci-out/check.log 2>/dev/null | sort -u | tee -a ci-out/summary.txt || true
+
+      - name: save gradle caches
+        if: ${{ always() && steps.assemble.outcome == 'success' }}
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            .gradle/loom-cache
+          key: gradle-${{ runner.os }}-${{ hashFiles('gradle.properties', 'build.gradle', 'settings.gradle', 'gradle/wrapper/gradle-wrapper.properties') }}-${{ github.run_id }}
+
+      - name: upload jar, logs and reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ancient-foundry
+          path: ci-out/
+          if-no-files-found: warn
+
+      # Mirrors the results to a branch, so they can be read with plain git.
+      - name: publish results branch
+        if: ${{ always() && github.event_name == 'push' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf /tmp/ci-results
+          cp -r ci-out /tmp/ci-results
+          cd /tmp/ci-results
+          git init -q -b ci-results
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "CI results for ${GITHUB_SHA} (run ${GITHUB_RUN_NUMBER})"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-results
+
+      - name: publish release
+        if: ${{ success() && startsWith(github.ref, 'refs/tags/v') }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          jar="$(ls build/libs/*.jar | grep -v -- '-sources' | head -n 1)"
+          gh release create "$GITHUB_REF_NAME" "$jar" --title "Fundição Ancestral $GITHUB_REF_NAME" --generate-notes

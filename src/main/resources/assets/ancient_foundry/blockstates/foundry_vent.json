@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "ancient_foundry:block/foundry_vent"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ancient_foundry:ancient_core"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_trigger_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "ancient_foundry:foundry_casing",
+              "minecraft:ancient_debris"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_trigger_item"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ancient_foundry:ancient_core"
+    ]
+  }
+}

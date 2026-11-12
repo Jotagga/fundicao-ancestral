@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": {
+      "item": "minecraft:crying_obsidian"
+    },
+    "G": {
+      "item": "minecraft:gold_block"
+    },
+    "M": {
+      "item": "minecraft:magma_block"
+    },
+    "A": {
+      "item": "minecraft:ancient_debris"
+    }
+  },
+  "pattern": [
+    "OGO",
+    "MAM",
+    "OGO"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ancient_foundry:ancient_core"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "ancient_foundry:foundry_output_hatch"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_trigger_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "ancient_foundry:foundry_casing"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_trigger_item"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "ancient_foundry:foundry_output_hatch"
+    ]
+  }
+}

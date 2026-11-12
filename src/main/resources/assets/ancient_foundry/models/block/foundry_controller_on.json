@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "ancient_foundry:block/foundry_casing",
+    "front": "ancient_foundry:block/foundry_controller_front_on",
+    "side": "ancient_foundry:block/foundry_casing"
+  }
+}

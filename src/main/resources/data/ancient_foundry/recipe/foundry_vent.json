@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_bars"
+    },
+    "S": {
+      "item": "minecraft:soul_campfire"
+    },
+    "C": {
+      "item": "ancient_foundry:foundry_casing"
+    }
+  },
+  "pattern": [
+    "III",
+    "CSC",
+    "C C"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ancient_foundry:foundry_vent"
+  }
+}

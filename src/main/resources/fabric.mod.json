@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "ancient_foundry",
+	"version": "${version}",
+	"name": "Ancient Foundry",
+	"description": "A slow multiblock foundry that turns Nether rock and soul sand into netherite scrap, one rare drop at a time. Fundição multibloco que transforma rocha do Nether e areia das almas em fragmentos de netherita, um drop raro por vez.",
+	"authors": [
+		"Jotagga"
+	],
+	"contact": {
+		"sources": "https://github.com/Jotagga/fundicao-ancestral"
+	},
+	"license": "MIT",
+	"icon": "assets/ancient_foundry/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.ancientfoundry.AncientFoundry"
+		],
+		"client": [
+			"dev.ancientfoundry.client.AncientFoundryClient"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": ">=1.21 <1.21.2",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

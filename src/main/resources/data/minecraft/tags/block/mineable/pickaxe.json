@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "ancient_foundry:foundry_controller",
+    "ancient_foundry:foundry_casing",
+    "ancient_foundry:foundry_glass",
+    "ancient_foundry:foundry_input_hatch",
+    "ancient_foundry:foundry_output_hatch",
+    "ancient_foundry:foundry_vent",
+    "ancient_foundry:ancient_core"
+  ]
+}

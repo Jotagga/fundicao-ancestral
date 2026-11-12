@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "ancient_foundry:block/foundry_vent_top",
+    "side": "ancient_foundry:block/foundry_vent_side",
+    "bottom": "ancient_foundry:block/foundry_casing"
+  }
+}

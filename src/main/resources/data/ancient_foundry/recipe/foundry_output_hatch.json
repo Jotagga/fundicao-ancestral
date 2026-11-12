@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "ancient_foundry:foundry_casing"
+    },
+    {
+      "item": "minecraft:dropper"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "ancient_foundry:foundry_output_hatch"
+  }
+}
