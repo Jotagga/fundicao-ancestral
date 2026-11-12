@@ -25,6 +25,7 @@ import net.minecraft.client.MouseHandler;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.screens.LevelLoadingScreen;
 import net.minecraft.client.gui.screens.ReceivingLevelScreen;
+import net.minecraft.client.gui.screens.inventory.CraftingScreen;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -33,16 +34,24 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LevelSettings;
@@ -72,6 +81,9 @@ public final class ClientSmokeTest implements ClientModInitializer {
 	private static final List<String> TEXTURES = List.of("foundry_casing", "foundry_glass",
 			"foundry_controller_front_off", "foundry_controller_front_idle", "foundry_controller_front_on",
 			"foundry_input_hatch", "foundry_output_hatch", "foundry_vent_top", "foundry_vent_side", "ancient_core");
+
+	private static final List<String> RECIPES = List.of("foundry_casing", "foundry_glass", "foundry_controller",
+			"ancient_core", "foundry_vent", "foundry_input_hatch", "foundry_output_hatch");
 
 	private final List<String> failures = Collections.synchronizedList(new ArrayList<>());
 	private final AtomicLong clientTicks = new AtomicLong();
@@ -234,9 +246,111 @@ public final class ClientSmokeTest implements ClientModInitializer {
 
 		screenshot("foundry_gui_tooltip.png");
 
-		// Park the pointer in a corner so no tooltip covers the screen. The virtual display has no
-		// window manager, so the window never gets focus and GLFW would ignore a pointer warp;
-		// feed the move to the game's mouse handler instead.
+		parkPointer();
+		waitTicks(10);
+		Thread.sleep(1_000L);
+		screenshot("foundry_gui.png");
+		onClient(client -> {
+			client.player.closeContainer();
+			return null;
+		});
+		waitTicks(10);
+
+		recipeScreenshots(server);
+	}
+
+	/**
+	 * Crafts every recipe of the mod in a real crafting table and saves a screenshot of each grid,
+	 * the raw material of docs/receitas.png. It also proves the recipes work in the actual game.
+	 */
+	private void recipeScreenshots(IntegratedServer server) throws InterruptedException {
+		BlockPos tablePos = onServer(server, s -> {
+			ServerPlayer player = s.getPlayerList().getPlayers().get(0);
+			BlockPos pos = player.blockPosition().below(2);
+			s.overworld().setBlock(pos, Blocks.CRAFTING_TABLE.defaultBlockState(), 3);
+			return pos;
+		});
+
+		for (String name : RECIPES) {
+			onServer(server, s -> {
+				ServerPlayer player = s.getPlayerList().getPlayers().get(0);
+				ServerLevel level = s.overworld();
+				RecipeHolder<?> holder = s.getRecipeManager().byKey(AncientFoundry.id(name)).orElse(null);
+
+				if (holder == null) {
+					fail("recipe missing: " + name);
+					return null;
+				}
+
+				player.openMenu(new SimpleMenuProvider(
+						(id, inventory, p) -> new CraftingMenu(id, inventory, ContainerLevelAccess.create(level, tablePos)),
+						Component.translatable("container.crafting")));
+
+				if (!(player.containerMenu instanceof CraftingMenu menu)) {
+					fail("the crafting table did not open for " + name);
+					return null;
+				}
+
+				// Slot 0 is the result; slots 1..9 are the grid, row by row.
+				Recipe<?> recipe = holder.value();
+				NonNullList<Ingredient> ingredients = recipe.getIngredients();
+				int width = recipe instanceof ShapedRecipe shaped ? shaped.getWidth() : 3;
+
+				for (int i = 0; i < ingredients.size(); i++) {
+					ItemStack[] options = ingredients.get(i).getItems();
+
+					if (options.length > 0) {
+						menu.getSlot(1 + (i / width) * 3 + (i % width)).set(options[0].copy());
+					}
+				}
+
+				menu.broadcastChanges();
+				ItemStack result = menu.getSlot(0).getItem();
+				ItemStack expected = recipe.getResultItem(s.registryAccess());
+				check(ItemStack.isSameItem(result, expected) && result.getCount() == expected.getCount(),
+						"crafting " + name + " gives " + result + ", expected " + expected);
+				return null;
+			});
+
+			waitFor("the crafting table screen", 30, () -> onClient(client -> client.screen instanceof CraftingScreen));
+			waitTicks(10);
+			parkPointer();
+			Thread.sleep(1_500L);
+
+			onClient(client -> {
+				if (client.screen instanceof CraftingScreen screen) {
+					LOGGER.info("[clienttest] crafting screen geometry: scale={} width={} height={}",
+							client.getWindow().getGuiScale(), screen.width, screen.height);
+					check(screen.getMenu().getSlot(0).hasItem(), "the client shows no result for " + name);
+				}
+
+				return null;
+			});
+			screenshot("recipe_" + name + ".png");
+
+			onServer(server, s -> {
+				ServerPlayer player = s.getPlayerList().getPlayers().get(0);
+
+				if (player.containerMenu instanceof CraftingMenu menu) {
+					// Empty the grid first, or closing would hand the items to the player.
+					for (int slot = 1; slot <= 9; slot++) {
+						menu.getSlot(slot).set(ItemStack.EMPTY);
+					}
+				}
+
+				player.closeContainer();
+				return null;
+			});
+			waitFor("the crafting table screen to close", 30, () -> onClient(client -> !(client.screen instanceof CraftingScreen)));
+		}
+	}
+
+	/**
+	 * Parks the pointer in a corner so no tooltip covers the screen. The virtual display has no
+	 * window manager, so the window never gets focus and GLFW would ignore a pointer warp; the
+	 * move is fed to the game's mouse handler instead.
+	 */
+	private static void parkPointer() {
 		onClient(client -> {
 			try {
 				Method onMove = MouseHandler.class.getDeclaredMethod("onMove", long.class, double.class, double.class);
@@ -248,14 +362,6 @@ public final class ClientSmokeTest implements ClientModInitializer {
 
 			return null;
 		});
-		waitTicks(10);
-		Thread.sleep(1_000L);
-		screenshot("foundry_gui.png");
-		onClient(client -> {
-			client.player.closeContainer();
-			return null;
-		});
-		waitTicks(10);
 	}
 
 	/** Runs on the client thread: every model, texture and translation of the mod must be real. */
