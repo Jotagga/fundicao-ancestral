@@ -6,8 +6,8 @@
 #   5. (second job) start the real client on a virtual display, build a foundry in a flat world,
 #      check models, textures and translations, and save screenshots
 # The jar, the logs, the test reports and the screenshots are uploaded as artifacts and mirrored
-# to the `ci-results` and `ci-results-client` branches. Pushing a tag such as v1.0.0 also
-# publishes a release with the jar.
+# to the `ci-results` and `ci-results-client` branches. A tag such as v1.0.0, pushed with git or
+# created by publishing a release on the GitHub site, gets the tested jar attached to its release.
 
 name: build
 
@@ -19,6 +19,8 @@ on:
     tags:
       - 'v*'
   pull_request:
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
@@ -150,7 +152,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           jar="$(ls build/libs/*.jar | grep -v -- '-sources' | head -n 1)"
-          gh release create "$GITHUB_REF_NAME" "$jar" --title "Fundição Ancestral $GITHUB_REF_NAME" --generate-notes
+          # A release drafted on the GitHub site already exists by now: just attach the jar.
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "$jar" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "$jar" --title "Fundição Ancestral $GITHUB_REF_NAME" --generate-notes
+          fi
 
   client:
     name: client smoke test
