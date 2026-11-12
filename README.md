@@ -32,28 +32,90 @@ Sem ingredientes ou com a saída cheia, a fundição para de pegar combustível 
 
 ## Blocos
 
-| Bloco | Receita | Onde vai |
-|---|---|---|
-| **Revestimento da Fundição** (x4) | 4 tijolos de pedra-negra polida nos cantos, 4 barras de ferro nos lados, 1 bloco de magma no centro | Base, quinas, paredes e teto |
-| **Vidro da Fundição** (x4) | 4 vidros em cruz com 1 revestimento no centro | No lugar do revestimento em paredes e teto, menos nas quinas |
-| **Controlador da Fundição** | Revestimento nos 4 cantos; comparador em cima, diamantes dos lados, alto-forno no centro, bloco de redstone embaixo | Meio da parede da frente, uma camada acima da base |
-| **Núcleo Ancestral** | Obsidiana chorona nos 4 cantos; blocos de ouro em cima e embaixo, blocos de magma dos lados, **1 detrito ancestral** no centro | Centro da câmara, cercado de lava |
-| **Exaustor da Fundição** | 3 grades de ferro em cima; revestimento, fogueira das almas, revestimento no meio; revestimento, vazio, revestimento embaixo | Centro do teto, com ar livre em cima |
-| **Escotilha de Entrada** | 1 revestimento + 1 funil (sem forma) | Parede ou teto |
-| **Escotilha de Saída** | 1 revestimento + 1 liberador (sem forma) | Parede ou teto |
+| Bloco | Onde vai |
+|---|---|
+| **Revestimento da Fundição** | Base, quinas, paredes e teto |
+| **Vidro da Fundição** | No lugar do revestimento em paredes e teto, menos nas quinas |
+| **Controlador da Fundição** | Meio da parede da frente, uma camada acima da base |
+| **Núcleo Ancestral** | Centro da câmara, cercado de lava |
+| **Exaustor da Fundição** | Centro do teto, com ar livre em cima |
+| **Escotilha de Entrada** | Parede ou teto; funis e liberadores abastecem a fundição por ela |
+| **Escotilha de Saída** | Parede ou teto; empurra os fragmentos para o baú ou funil encostado |
 
-As receitas aparecem no livro de receitas quando você pega um tijolo de pedra-negra polida ou um revestimento.
+## Receitas
+
+Todas na bancada de trabalho. Comece pelo Revestimento, que entra em quase todas as outras. No jogo, elas aparecem no livro de receitas assim que você pega um tijolo de pedra-negra polida ou um Revestimento.
+
+**Revestimento da Fundição** (rende 4)
+
+<table>
+  <tr><td align="center">Tijolos de pedra-negra polida</td><td align="center">Barra de ferro</td><td align="center">Tijolos de pedra-negra polida</td></tr>
+  <tr><td align="center">Barra de ferro</td><td align="center">Bloco de magma</td><td align="center">Barra de ferro</td></tr>
+  <tr><td align="center">Tijolos de pedra-negra polida</td><td align="center">Barra de ferro</td><td align="center">Tijolos de pedra-negra polida</td></tr>
+</table>
+
+**Vidro da Fundição** (rende 4)
+
+<table>
+  <tr><td align="center"></td><td align="center">Vidro</td><td align="center"></td></tr>
+  <tr><td align="center">Vidro</td><td align="center">Revestimento da Fundição</td><td align="center">Vidro</td></tr>
+  <tr><td align="center"></td><td align="center">Vidro</td><td align="center"></td></tr>
+</table>
+
+**Controlador da Fundição**
+
+<table>
+  <tr><td align="center">Revestimento da Fundição</td><td align="center">Comparador de redstone</td><td align="center">Revestimento da Fundição</td></tr>
+  <tr><td align="center">Diamante</td><td align="center">Alto-forno</td><td align="center">Diamante</td></tr>
+  <tr><td align="center">Revestimento da Fundição</td><td align="center">Bloco de redstone</td><td align="center">Revestimento da Fundição</td></tr>
+</table>
+
+**Núcleo Ancestral**
+
+<table>
+  <tr><td align="center">Obsidiana chorona</td><td align="center">Bloco de ouro</td><td align="center">Obsidiana chorona</td></tr>
+  <tr><td align="center">Bloco de magma</td><td align="center">Detritos ancestrais</td><td align="center">Bloco de magma</td></tr>
+  <tr><td align="center">Obsidiana chorona</td><td align="center">Bloco de ouro</td><td align="center">Obsidiana chorona</td></tr>
+</table>
+
+**Exaustor da Fundição**
+
+<table>
+  <tr><td align="center">Grades de ferro</td><td align="center">Grades de ferro</td><td align="center">Grades de ferro</td></tr>
+  <tr><td align="center">Revestimento da Fundição</td><td align="center">Fogueira das almas</td><td align="center">Revestimento da Fundição</td></tr>
+  <tr><td align="center">Revestimento da Fundição</td><td align="center"></td><td align="center">Revestimento da Fundição</td></tr>
+</table>
+
+**Escotilha de Entrada**: 1 Revestimento da Fundição + 1 Funil, em qualquer posição da bancada.
+
+**Escotilha de Saída**: 1 Revestimento da Fundição + 1 Liberador, em qualquer posição da bancada.
 
 ## Montagem
 
 ![Montagem camada por camada](docs/montagem.png)
 
-A estrutura tem 5 x 5 de base e 4 de altura. Lista de materiais para a versão mais simples:
+A estrutura tem 5 x 5 de base e 4 de altura. Para a versão mais simples, sem vidro:
 
-- 71 Revestimentos da Fundição (18 fabricações), menos os que você trocar por vidro ou escotilhas
+- 71 Revestimentos da Fundição na estrutura
 - 9 blocos de magma e 17 baldes de lava
 - 1 Núcleo Ancestral, 1 Exaustor e 1 Controlador
-- Escotilhas à vontade (são opcionais: sem elas, você abastece pela tela do controlador)
+- Escotilhas à vontade (são opcionais: sem elas, você abastece pela tela do controlador). Cada uma gasta 1 revestimento na receita e ocupa o lugar de 1 revestimento na parede.
+
+O Controlador e o Exaustor gastam 4 revestimentos cada um, então são **79 revestimentos ao todo, ou 20 fabricações**. Somando tudo, o material bruto é:
+
+| Material | Quantidade | Para quê |
+|---|---|---|
+| Tijolos de pedra-negra polida | 80 | Revestimentos |
+| Barras de ferro | 80 | Revestimentos |
+| Blocos de magma | 31 | 20 nos revestimentos, 9 na base, 2 no núcleo |
+| Baldes de lava | 17 | Câmara |
+| Obsidiana chorona | 4 | Núcleo |
+| Blocos de ouro | 2 | Núcleo |
+| Detritos ancestrais | 1 | Núcleo |
+| Diamantes | 2 | Controlador |
+| Comparador, alto-forno e bloco de redstone | 1 de cada | Controlador |
+| Grades de ferro | 3 | Exaustor |
+| Fogueira das almas | 1 | Exaustor |
 
 Monte de baixo para cima, seguindo a imagem:
 
