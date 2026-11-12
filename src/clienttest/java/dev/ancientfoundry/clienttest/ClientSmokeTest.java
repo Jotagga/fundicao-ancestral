@@ -124,7 +124,8 @@ public final class ClientSmokeTest implements ClientModInitializer {
 
 	private void runTest() throws Exception {
 		waitFor("the resources to load", 600, () -> onClient(client -> client.getOverlay() == null && client.screen != null));
-		LOGGER.info("[clienttest] client loaded, language {}", onClient(client -> client.getLanguageManager().getSelected()));
+		String language = onClient(client -> client.getLanguageManager().getSelected());
+		LOGGER.info("[clienttest] client loaded, language {}", language);
 
 		onClient(client -> {
 			client.options.pauseOnLostFocus = false;

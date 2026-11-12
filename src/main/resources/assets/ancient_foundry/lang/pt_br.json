@@ -18,7 +18,7 @@
   "block.ancient_foundry.ancient_core.tooltip": "Fica no centro da câmara, cercado de lava.",
 
   "gui.ancient_foundry.status.unformed": "Estrutura incompleta",
-  "gui.ancient_foundry.status.paused": "Pausada por redstone",
+  "gui.ancient_foundry.status.paused": "Pausada (redstone)",
   "gui.ancient_foundry.status.no_input": "Sem ingredientes",
   "gui.ancient_foundry.status.output_full": "Saída cheia",
   "gui.ancient_foundry.status.no_fuel": "Sem combustível",

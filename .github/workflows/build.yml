@@ -81,7 +81,7 @@ jobs:
       - name: unit tests and in-game tests
         id: check
         if: ${{ !cancelled() }}
-        run: ./gradlew check --stacktrace -PgameJavaVersion=21 -Porg.gradle.java.installations.fromEnv=JAVA_HOME_21_X64 2>&1 | tee ci-out/check.log
+        run: ./gradlew check --stacktrace --warning-mode all -PgameJavaVersion=21 -Porg.gradle.java.installations.fromEnv=JAVA_HOME_21_X64 2>&1 | tee ci-out/check.log
 
       - name: boot the packaged jar on a production server
         id: smoke

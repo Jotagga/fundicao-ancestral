@@ -18,7 +18,7 @@
   "block.ancient_foundry.ancient_core.tooltip": "Goes in the centre of the chamber, surrounded by lava.",
 
   "gui.ancient_foundry.status.unformed": "Structure incomplete",
-  "gui.ancient_foundry.status.paused": "Paused by redstone",
+  "gui.ancient_foundry.status.paused": "Paused (redstone)",
   "gui.ancient_foundry.status.no_input": "No ingredients",
   "gui.ancient_foundry.status.output_full": "Output full",
   "gui.ancient_foundry.status.no_fuel": "No fuel",
