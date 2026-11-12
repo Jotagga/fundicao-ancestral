@@ -46,6 +46,11 @@ Sem ingredientes ou com a saída cheia, a fundição para de pegar combustível 
 
 Todas na bancada de trabalho. Comece pelo Revestimento, que entra em quase todas as outras. No jogo, elas aparecem no livro de receitas assim que você pega um tijolo de pedra-negra polida ou um Revestimento.
 
+![Receitas de todos os blocos](docs/receitas.png)
+
+<details>
+<summary>As mesmas receitas em texto</summary>
+
 **Revestimento da Fundição** (rende 4)
 
 <table>
@@ -89,6 +94,8 @@ Todas na bancada de trabalho. Comece pelo Revestimento, que entra em quase todas
 **Escotilha de Entrada**: 1 Revestimento da Fundição + 1 Funil, em qualquer posição da bancada.
 
 **Escotilha de Saída**: 1 Revestimento da Fundição + 1 Liberador, em qualquer posição da bancada.
+
+</details>
 
 ## Montagem
 
@@ -177,7 +184,7 @@ O GitHub Actions (`.github/workflows/build.yml`) repete tudo isso a cada push e 
 
 O jar, os relatórios e as capturas ficam nos artefatos de cada execução e nos branches `ci-results` e `ci-results-client`.
 
-As texturas são geradas por `tools/gen_textures.py` e os JSON por `tools/gen_resources.py`.
+As texturas são geradas por `tools/gen_textures.py` e os JSON por `tools/gen_resources.py`. A imagem das receitas é montada por `tools/gen_recipe_image.py` a partir das capturas que o teste do cliente tira da bancada de trabalho.
 
 ## Licença
 
