@@ -1,6 +1,7 @@
 package dev.ancientfoundry.clienttest;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,7 @@ import dev.ancientfoundry.registry.ModBlocks;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.MouseHandler;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.screens.LevelLoadingScreen;
 import net.minecraft.client.gui.screens.ReceivingLevelScreen;
@@ -37,6 +39,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -49,7 +52,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.WorldOptions;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -191,8 +193,8 @@ public final class ClientSmokeTest implements ClientModInitializer {
 		// From above: the vent, the roof windows and the hopper on the input hatch.
 		onServer(server, s -> {
 			ServerPlayer player = s.getPlayerList().getPlayers().get(0);
-			player.teleportTo(s.overworld(), controllerPos.getX() + 0.5 - 3.0, controllerPos.getY() + 5.0,
-					controllerPos.getZ() + 0.5 - 3.0, -29.0F, 34.0F);
+			player.teleportTo(s.overworld(), controllerPos.getX() + 0.5 - 1.5, controllerPos.getY() + 7.5,
+					controllerPos.getZ() + 0.5 - 1.0, -27.0F, 61.0F);
 			return null;
 		});
 		waitTicks(40);
@@ -232,9 +234,18 @@ public final class ClientSmokeTest implements ClientModInitializer {
 
 		screenshot("foundry_gui_tooltip.png");
 
-		// Park the pointer in a corner so no tooltip covers the screen.
+		// Park the pointer in a corner so no tooltip covers the screen. The virtual display has no
+		// window manager, so the window never gets focus and GLFW would ignore a pointer warp;
+		// feed the move to the game's mouse handler instead.
 		onClient(client -> {
-			GLFW.glfwSetCursorPos(client.getWindow().getWindow(), 6.0, 6.0);
+			try {
+				Method onMove = MouseHandler.class.getDeclaredMethod("onMove", long.class, double.class, double.class);
+				onMove.setAccessible(true);
+				onMove.invoke(client.mouseHandler, client.getWindow().getWindow(), 6.0, 6.0);
+			} catch (ReflectiveOperationException e) {
+				LOGGER.warn("[clienttest] could not move the pointer", e);
+			}
+
 			return null;
 		});
 		waitTicks(10);
@@ -285,6 +296,14 @@ public final class ClientSmokeTest implements ClientModInitializer {
 		BlockPos feet = player.blockPosition();
 		BlockPos controllerPos = feet.offset(0, 1, 6);
 		Direction facing = Direction.NORTH;
+
+		server.getGameRules().getRule(GameRules.RULE_DOMOBSPAWNING).set(false, server);
+
+		for (Entity entity : level.getAllEntities()) {
+			if (!(entity instanceof ServerPlayer)) {
+				entity.discard();
+			}
+		}
 
 		FoundryStructure.place(level, controllerPos, facing);
 
