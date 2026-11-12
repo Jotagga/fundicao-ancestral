@@ -1,0 +1,17 @@
+{
+	"schemaVersion": 1,
+	"id": "ancient_foundry_clienttest",
+	"version": "1.0.0",
+	"name": "Ancient Foundry Client Smoke Test",
+	"description": "Boots the real client, builds a foundry in a flat world and saves screenshots. Not part of the released mod.",
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"dev.ancientfoundry.clienttest.ClientSmokeTest"
+		]
+	},
+	"depends": {
+		"ancient_foundry": "*"
+	}
+}

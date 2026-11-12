@@ -36,6 +36,39 @@ loom {
 	}
 }
 
+// A scripted run of the real client lives in src/clienttest: it loads a flat world, builds a
+// foundry, checks models/textures/translations and saves screenshots. Start it with
+// `./gradlew runClientTest`; it is not part of `build` and is not shipped in the jar.
+sourceSets {
+	clienttest {
+		compileClasspath += sourceSets.main.output + sourceSets.client.output
+		runtimeClasspath += sourceSets.main.output + sourceSets.client.output
+	}
+}
+
+configurations {
+	clienttestCompileClasspath.extendsFrom(compileClasspath, clientCompileClasspath)
+	clienttestRuntimeClasspath.extendsFrom(runtimeClasspath, clientRuntimeClasspath)
+}
+
+loom {
+	mods {
+		"ancient_foundry_clienttest" {
+			sourceSet sourceSets.clienttest
+		}
+	}
+
+	runs {
+		clientTest {
+			client()
+			source sourceSets.clienttest
+			runDir "build/run/clientTest"
+			property "ancientfoundry.clienttest", "true"
+			programArgs "--width", "1280", "--height", "720"
+		}
+	}
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"

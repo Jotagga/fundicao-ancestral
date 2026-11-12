@@ -134,7 +134,7 @@ say "execute if block 0 101 0 ancient_foundry:foundry_controller[formed=true,lit
 wait_for 'foundry-is-lit' 20 || fail "the controller did not light up"
 
 say "loot spawn 0 110 0 loot ancient_foundry:blocks/foundry_casing"
-wait_for 'from loot table ancient_foundry:blocks/foundry_casing' 20 || fail "the casing loot table did not drop anything"
+wait_for 'Dropped 1 \[Foundry Casing\]' 20 || fail "the casing loot table did not drop anything"
 
 echo "== stopping the server"
 say "stop"
