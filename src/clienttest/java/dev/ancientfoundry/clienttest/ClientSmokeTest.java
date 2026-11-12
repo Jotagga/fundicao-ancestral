@@ -299,11 +299,16 @@ public final class ClientSmokeTest implements ClientModInitializer {
 
 		server.getGameRules().getRule(GameRules.RULE_DOMOBSPAWNING).set(false, server);
 
+		// Copy first: discarding an entity changes the collection being walked.
+		List<Entity> strays = new ArrayList<>();
+
 		for (Entity entity : level.getAllEntities()) {
 			if (!(entity instanceof ServerPlayer)) {
-				entity.discard();
+				strays.add(entity);
 			}
 		}
+
+		strays.forEach(Entity::discard);
 
 		FoundryStructure.place(level, controllerPos, facing);
 
