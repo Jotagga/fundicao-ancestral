@@ -1,0 +1,18 @@
+== mod jar: /home/runner/work/fundicao-ancestral/fundicao-ancestral/build/libs/ancient-foundry-1.0.0+1.21.1.jar
+== downloading the Fabric server launcher and Fabric API
+   Minecraft 1.21.1, loader 0.20.1, installer 1.1.2, Fabric API 0.116.17+1.21.1
+openjdk version "21.0.13" 2026-10-20 LTS
+== waiting for the server to start
+[20:39:55] [Server thread/INFO]: Done (0.669s)! For help, type "help"
+== building a foundry with commands
+   foundry formed
+== feeding it and checking that it heats up
+   heat after ~6 s: 120
+== stopping the server
+== warnings and errors in the log
+96:[20:39:53] [main/ERROR]: No key layers in MapLike[{}]
+106:[20:39:54] [Server thread/WARN]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+107:[20:39:54] [Server thread/WARN]: The server will make no attempt to authenticate usernames. Beware.
+108:[20:39:54] [Server thread/WARN]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+109:[20:39:54] [Server thread/WARN]: To change this, set "online-mode" to "true" in the server.properties file.
+== production server smoke test passed

@@ -1,0 +1,9 @@
+commit:    f426cea7d5586284a69d3ee156de30f5bbbc852f
+ref:       refs/tags/v1.0
+run:       https://github.com/Jotagga/fundicao-ancestral/actions/runs/43302305469
+finished:  2026-11-12T20:40:15Z
+resources: success
+assemble:  success
+check:     success
+smoke:     success
+[20:39:32] [Server thread/INFO] (ancient_foundry) [gametest] 12 h cold start: 41 scraps = 10 ingots; 40th scrap after 11.70 h; 11.97 h spent working
