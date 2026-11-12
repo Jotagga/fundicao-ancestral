@@ -1,0 +1,27 @@
+commit:    f426cea7d5586284a69d3ee156de30f5bbbc852f
+ref:       refs/tags/v1.0
+run:       https://github.com/Jotagga/fundicao-ancestral/actions/runs/43302305469
+finished:  2026-11-12T20:40:49Z
+client:    success
+[20:39:35] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] client loaded, language pt_br
+[20:39:35] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] resource checks done, 0 problem(s) so far
+[20:39:44] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] in the world
+[20:40:01] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: foundry_world.png
+[20:40:09] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: foundry_top.png
+[20:40:14] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: foundry_gui_tooltip.png
+[20:40:17] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: foundry_gui.png
+[20:40:20] [Render thread/INFO] (ancient_foundry_clienttest) [clienttest] crafting screen geometry: scale=3.0 width=427 height=240
+[20:40:22] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: recipe_foundry_casing.png
+[20:40:24] [Render thread/INFO] (ancient_foundry_clienttest) [clienttest] crafting screen geometry: scale=3.0 width=427 height=240
+[20:40:26] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: recipe_foundry_glass.png
+[20:40:28] [Render thread/INFO] (ancient_foundry_clienttest) [clienttest] crafting screen geometry: scale=3.0 width=427 height=240
+[20:40:30] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: recipe_foundry_controller.png
+[20:40:32] [Render thread/INFO] (ancient_foundry_clienttest) [clienttest] crafting screen geometry: scale=3.0 width=427 height=240
+[20:40:34] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: recipe_ancient_core.png
+[20:40:36] [Render thread/INFO] (ancient_foundry_clienttest) [clienttest] crafting screen geometry: scale=3.0 width=427 height=240
+[20:40:38] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: recipe_foundry_vent.png
+[20:40:40] [Render thread/INFO] (ancient_foundry_clienttest) [clienttest] crafting screen geometry: scale=3.0 width=427 height=240
+[20:40:42] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: recipe_foundry_input_hatch.png
+[20:40:45] [Render thread/INFO] (ancient_foundry_clienttest) [clienttest] crafting screen geometry: scale=3.0 width=427 height=240
+[20:40:47] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] screenshot saved: recipe_foundry_output_hatch.png
+[20:40:47] [Ancient Foundry client test/INFO] (ancient_foundry_clienttest) [clienttest] RESULT: PASS
