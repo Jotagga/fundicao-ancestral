@@ -4,7 +4,7 @@ Mod **Fabric** para **Minecraft 1.21.1** que adiciona uma máquina multibloco pa
 
 Precisa de [Fabric Loader](https://fabricmc.net/use/) e [Fabric API](https://modrinth.com/mod/fabric-api). Funciona em mundo solo e em servidor (no servidor, o mod vai no servidor e nos clientes).
 
-![Montagem camada por camada](docs/montagem.png)
+![A fundição funcionando: lava atrás dos vidros, controlador aceso e escotilha de saída](docs/fundicao.png)
 
 ## Como a máquina funciona
 
@@ -46,6 +46,8 @@ As receitas aparecem no livro de receitas quando você pega um tijolo de pedra-n
 
 ## Montagem
 
+![Montagem camada por camada](docs/montagem.png)
+
 A estrutura tem 5 x 5 de base e 4 de altura. Lista de materiais para a versão mais simples:
 
 - 71 Revestimentos da Fundição (18 fabricações), menos os que você trocar por vidro ou escotilhas
@@ -65,6 +67,8 @@ As quatro quinas verticais, a base e a borda do teto só aceitam revestimento. N
 **Clique com o botão direito no Controlador**: se a estrutura estiver errada, ele diz qual bloco falta, em que coordenada, e marca o lugar com partículas. Quando estiver certa, o visor do controlador muda de vermelho para âmbar e o clique abre a tela.
 
 ## Uso
+
+![Tela do controlador](docs/tela.png)
 
 Na tela do controlador: rocha e areia das almas nos dois espaços de cima, combustível embaixo. A coluna da esquerda mostra a temperatura (a máquina trabalha acima da marca branca), a seta mostra o ciclo e o painel escuro mostra o estado, o ciclo da rodada atual e o total de fragmentos já produzidos.
 
@@ -104,7 +108,12 @@ O jar sai em `build/libs/`. O `build` também roda os testes:
 - **Testes de unidade** da lógica de calor, combustível e sorteio (`src/test`), incluindo 300 simulações de 12 horas.
 - **Testes dentro do jogo** (`src/gametest`), num servidor de teste: formação da estrutura nas 4 direções, cada tipo de bloco faltando, funil pela escotilha de entrada, saída para baú, pausa por redstone, a tela, e **864.000 ticks (12 horas) de um controlador real**, que precisam render pelo menos 40 fragmentos.
 
-O GitHub Actions (`.github/workflows/build.yml`) repete tudo isso a cada push e ainda liga o jar empacotado num servidor Fabric de verdade, monta uma fundição por comandos e confere que ela forma e aquece.
+O GitHub Actions (`.github/workflows/build.yml`) repete tudo isso a cada push e ainda:
+
+- liga o jar empacotado num servidor Fabric de verdade, monta uma fundição por comandos e confere que ela forma e aquece;
+- abre o cliente do jogo num display virtual (`./gradlew runClientTest`), confere modelos, texturas, traduções e a tela do controlador, e tira as capturas de tela usadas aqui.
+
+O jar, os relatórios e as capturas ficam nos artefatos de cada execução e nos branches `ci-results` e `ci-results-client`.
 
 As texturas são geradas por `tools/gen_textures.py` e os JSON por `tools/gen_resources.py`.
 
